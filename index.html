@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<title>بارینو | فروشگاه آنلاین میوه</title>
+
+<style>
+body{
+margin:0;
+font-family:tahoma;
+direction:rtl;
+background:#f4f6f8;
+}
+
+header{
+background:linear-gradient(90deg,#16a34a,#22c55e);
+color:white;
+padding:15px;
+text-align:center;
+}
+
+.header-title{
+font-size:22px;
+font-weight:bold;
+}
+
+.header-sub{
+font-size:12px;
+opacity:0.9;
+margin-top:5px;
+}
+
+.container{padding:10px}
+
+.product{
+background:white;
+margin:8px 0;
+padding:10px;
+border-radius:10px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+button{
+border:none;
+padding:6px 10px;
+border-radius:8px;
+cursor:pointer;
+background:#16a34a;
+color:white;
+}
+
+.cart{
+position:sticky;
+bottom:0;
+background:#111827;
+color:white;
+padding:12px;
+}
+
+#cartBox{
+background:white;
+margin:10px;
+padding:10px;
+border-radius:10px;
+color:black;
+}
+
+input,textarea{
+width:100%;
+padding:8px;
+margin:5px 0;
+border-radius:8px;
+border:1px solid #ddd;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- 🔥 HEADER حرفه‌ای -->
+<header>
+<div class="header-title">🍉 بارینو | فروشگاه آنلاین میوه</div>
+<div class="header-sub">ارسال سریع | پرداخت کارت | سفارش تلفنی و آنلاین</div>
+</header>
+
+<div class="container">
+
+<h3>🍎 میوه‌های تابستانی</h3>
+
+<div id="list"></div>
+
+<hr>
+
+<h3>👤 اطلاعات مشتری</h3>
+<input id="name" placeholder="نام">
+<input id="phone" placeholder="شماره تماس">
+<textarea id="address" placeholder="آدرس"></textarea>
+
+</div>
+
+<!-- سبد -->
+<div id="cartBox"></div>
+
+<div class="cart">
+💰 جمع کل: <span id="total">0</span>
+<button style="float:left;background:#16a34a" onclick="sendOrder()">ثبت سفارش</button>
+</div>
+
+<script>
+
+/* 🍉 لیست کامل میوه‌های تابستانی */
+let fruits=[
+{name:"هندوانه 🍉",price:20000},
+{name:"خربزه 🍈",price:30000},
+{name:"طالبی",price:25000},
+{name:"گرمک",price:28000},
+{name:"انگور 🍇",price:70000},
+{name:"هلو 🍑",price:60000},
+{name:"شلیل",price:65000},
+{name:"زردآلو",price:50000},
+{name:"آلو",price:45000},
+{name:"آلبالو",price:80000},
+{name:"گیلاس 🍒",price:90000},
+{name:"توت فرنگی 🍓",price:150000},
+{name:"موز 🍌",price:60000},
+{name:"سیب 🍎",price:50000},
+{name:"گلابی",price:55000},
+{name:"انبه 🥭",price:90000},
+{name:"آناناس 🍍",price:120000},
+{name:"لیمو 🍋",price:45000},
+{name:"نارنگی",price:40000},
+{name:"پرتقال 🍊",price:40000}
+];
+
+let cart=[];
+
+/* نمایش محصولات */
+function render(){
+
+let list=document.getElementById("list");
+list.innerHTML="";
+
+fruits.forEach((f,i)=>{
+list.innerHTML+=`
+<div class="product">
+<div>
+<b>${f.name}</b><br>
+${f.price} تومان
+</div>
+<button onclick="add(${i})">افزودن</button>
+</div>
+`;
+});
+}
+
+/* افزودن به سبد */
+function add(i){
+cart.push(fruits[i]);
+renderCart();
+}
+
+/* سبد خرید */
+function renderCart(){
+
+let box=document.getElementById("cartBox");
+box.innerHTML="";
+
+let total=0;
+
+cart.forEach((p,i)=>{
+total+=p.price;
+
+box.innerHTML+=`
+<div style="display:flex;justify-content:space-between;margin:5px 0">
+<span>${p.name} - ${p.price}</span>
+<button onclick="remove(${i})">حذف</button>
+</div>
+`;
+});
+
+document.getElementById("total").innerText=total;
+}
+
+/* حذف از سبد */
+function remove(i){
+cart.splice(i,1);
+renderCart();
+}
+
+/* ارسال به ایتا */
+function sendOrder(){
+
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
+
+let text="🛒 سفارش جدید بارینو%0A%0A";
+
+text+="👤 نام: "+name+"%0A";
+text+="📞 شماره: "+phone+"%0A";
+text+="🏠 آدرس: "+address+"%0A%0A";
+
+cart.forEach(p=>{
+text+=p.name+" - "+p.price+"%0A";
+});
+
+let total=cart.reduce((a,b)=>a+b.price,0);
+
+text+="%0A💰 جمع کل: "+total;
+
+window.open(
+"https://eitaa.com/share/url?text="+encodeURIComponent(text),
+"_blank"
+);
+
+cart=[];
+renderCart();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
